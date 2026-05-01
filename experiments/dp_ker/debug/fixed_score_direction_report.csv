@@ -1,0 +1,11 @@
+Method,AUC_score_label,AUC_negative_score_label,used_direction
+TF-IDF pair similarity,0.6509491733006736,0.3490508266993264,score
+BM25 pair similarity,0.7274954072259645,0.2725045927740355,score
+tfidf-svd pair similarity,0.6497244335578689,0.35027556644213104,score
+KG-Enhanced pair score,0.5211267605633804,0.4788732394366197,score
+DP-Embedding pair similarity seed=3407,0.3563992651561543,0.6436007348438457,negative_score
+DP-KER full pair score seed=3407,0.4390691977954685,0.5609308022045315,negative_score
+DP-Embedding pair similarity seed=42,0.4941824862216778,0.5058175137783221,negative_score
+DP-KER full pair score seed=42,0.548683404776485,0.45131659522351497,score
+DP-Embedding pair similarity seed=2026,0.5003061849357011,0.4996938150642988,score
+DP-KER full pair score seed=2026,0.5682792406613595,0.43172075933864046,score

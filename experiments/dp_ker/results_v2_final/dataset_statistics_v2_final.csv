@@ -1,0 +1,7 @@
+metric,value
+loaded_rows,1031
+valid_scored_rows,815
+positive_count_threshold_7,150
+negative_count_threshold_7,665
+source_used,hf_cache_snapshot
+feature_cache,F:\tu\DP-KER\lab\experiments\dp_ker\cache_v2_final\pair_features.parquet

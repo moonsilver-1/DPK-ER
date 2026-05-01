@@ -1,0 +1,19 @@
+\begin{table}[t]
+\centering
+\small
+\caption{Main Results}
+\label{tab:main_results}
+\begin{tabular}{lccccc}
+\hline
+Method & Recall@5 & NDCG@5 & MRR & Consistency & Valid Queries \\
+\hline
+TF-IDF+Cosine & 0.0763 & 0.0520 & 0.0630 & 0.5259 & 131 \\
+BM25 & 0.0687 & 0.0463 & 0.0513 & 0.5304 & 131 \\
+SBERT+Cosine & 0.0763 & 0.0497 & 0.0557 & 0.5256 & 131 \\
+RAG-based Rec. & 0.0687 & 0.0464 & 0.0566 & 0.5456 & 131 \\
+DP-Embedding & 0.0229 & 0.0154 & 0.0269 & 0.3277 & 131 \\
+DP-KER & 0.0229 & 0.0126 & 0.0263 & 0.4962 & 131 \\
+\hline
+\end{tabular}
+\end{table}
+

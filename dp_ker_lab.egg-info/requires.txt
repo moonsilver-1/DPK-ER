@@ -1,0 +1,11 @@
+numpy<2
+pandas<3
+scikit-learn
+tqdm
+datasets
+huggingface-hub
+rank-bm25
+scipy
+
+[sentence-transformers]
+sentence-transformers

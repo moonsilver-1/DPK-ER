@@ -1,0 +1,28 @@
+{
+  "loaded_rows": 1031,
+  "valid_scored_rows": 815,
+  "positive_count": 150,
+  "negative_count": 665,
+  "threshold": 7.0,
+  "feature_path": "F:\\tu\\DP-KER\\lab\\experiments\\dp_ker\\cache_v2_final\\pair_features.parquet",
+  "cache_dir": "F:\\tu\\DP-KER\\lab\\experiments\\dp_ker\\cache_v2_final",
+  "source_used": "hf_cache_snapshot",
+  "load_error": "datasets.load_dataset failed, recovered JSON files from HF cache. Error: DatasetGenerationError('An error occurred while generating the dataset')",
+  "category_counts": {
+    "match": 637,
+    "mismatch": 178
+  },
+  "epsilon_values": [
+    0.5,
+    1.0,
+    2.0,
+    4.0,
+    8.0
+  ],
+  "seeds": [
+    3407,
+    42,
+    2026
+  ],
+  "dp_note": "Embedding-level DP perturbation: L2 clipping plus Gaussian mechanism noise; not DP-SGD."
+}

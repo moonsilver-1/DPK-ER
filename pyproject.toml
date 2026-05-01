@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dp-ker-lab"
+version = "0.1.0"
+description = "DP-KER lab project reorganized as a uv-managed Python workspace"
+requires-python = ">=3.10,<3.12"
+dependencies = [
+  "numpy<2",
+  "pandas<3",
+  "scikit-learn",
+  "tqdm",
+  "datasets",
+  "huggingface-hub",
+  "rank-bm25",
+  "scipy",
+]
+
+[project.optional-dependencies]
+sentence-transformers = ["sentence-transformers"]
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+include = ["dp_ker_lab*"]
+

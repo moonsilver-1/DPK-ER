@@ -1,0 +1,16 @@
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+*.egg-info/
+dp_ker_lab.egg-info/
+
+data/raw/
+experiments/dp_ker/cache_v2_final/*.npy
+experiments/dp_ker/cache_v2_final/*.parquet
+experiments/dp_ker/cache_v2_final/dp_embeddings_*.npy
+experiments/dp_ker/cache_v2_final/text_embeddings.npy
+
+.uv-cache/
