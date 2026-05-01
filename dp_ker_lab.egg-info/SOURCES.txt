@@ -1,7 +1,0 @@
-pyproject.toml
-dp_ker_lab/__init__.py
-dp_ker_lab.egg-info/PKG-INFO
-dp_ker_lab.egg-info/SOURCES.txt
-dp_ker_lab.egg-info/dependency_links.txt
-dp_ker_lab.egg-info/requires.txt
-dp_ker_lab.egg-info/top_level.txt
