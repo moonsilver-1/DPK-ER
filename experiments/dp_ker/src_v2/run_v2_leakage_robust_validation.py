@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from collections import defaultdict
+from collections import defaultdict, Counter
 from pathlib import Path
 from typing import Any
 
@@ -23,7 +23,8 @@ from v2_common import (
 
 METHODS = ["TF-IDF", "BM25", "Embedding", "KG-only", "DP-Embedding", "DP-KER-v1"]
 SEED = 3407
-
+HOLDOUT_SEEDS = [3407, 42, 2026, 2027, 2028]
+HOLDOUT_PROTOCOL = "repeated_holdout_80_20_internal_val"
 
 def aggregate(rows: list[dict[str, Any]], keys: list[str]) -> list[dict[str, Any]]:
     metrics = [
@@ -122,30 +123,28 @@ def run_holdout(df: pd.DataFrame) -> list[dict[str, Any]]:
     y = df["binary_label"].to_numpy(int)
     indices = np.arange(len(df))
 
-    train_val_idx, test_idx = train_test_split(
-        indices,
-        test_size=0.20,
-        stratify=y,
-        random_state=SEED,
-    )
+    all_rows = []
 
-    y_train_val = y[train_val_idx]
+    for run_id, seed in enumerate(HOLDOUT_SEEDS, start=1):
+        train_idx, test_idx = train_test_split(
+            indices,
+            test_size=0.20,
+            stratify=y,
+            random_state=seed,
+        )
 
-    train_idx, val_idx = train_test_split(
-        train_val_idx,
-        test_size=0.25,
-        stratify=y_train_val,
-        random_state=SEED,
-    )
+        all_rows.extend(
+            evaluate_split(
+                df,
+                train_idx,
+                test_idx,
+                HOLDOUT_PROTOCOL,
+                run_id,
+                seed,
+            )
+        )
 
-    # The current train_classifier function already splits the training set
-    # internally for model selection. Here we merge train+val for final
-    # training and keep test_idx untouched. This gives a clean final hold-out
-    # test estimate without evaluating on test during model selection.
-    outer_train_idx = np.concatenate([train_idx, val_idx])
-
-    return evaluate_split(df, outer_train_idx, test_idx, "holdout_60_20_20", 1, SEED)
-
+    return all_rows
 
 def candidate_group_columns(df: pd.DataFrame) -> list[str]:
     possible = [
@@ -266,7 +265,9 @@ def write_reports(df: pd.DataFrame, group_notes: list[str]) -> None:
         "## Protocols",
         "",
         "- Row-level StratifiedKFold: 5 folds, seed=3407.",
-        "- Hold-out split: 60/20/20 design, final test uses 20% untouched data.",
+        "- Repeated hold-out: seeds=[3407, 42, 2026, 2027, 2028].",
+    	"- Each hold-out run uses 80% training pool and 20% untouched test set.",
+    	"- Model selection is performed inside the training pool; test sets are not used for model selection.",
         "",
         "## Group Split Notes",
         "",
@@ -294,12 +295,29 @@ def main() -> None:
         group_notes.append(note)
         rows.extend(group_rows)
 
+    protocol_counts = Counter(row["protocol"] for row in rows)
+    print("Protocol counts:", dict(protocol_counts))
+
+    if not rows:
+        raise RuntimeError("No validation rows were generated. Please check CV and hold-out protocols.")
+
     final_rows = aggregate(rows, ["protocol", "method"])
+    if not final_rows:
+        raise RuntimeError("Aggregated robust validation results are empty.")
 
     write_csv(RESULTS_DIR / "robust_validation_results_v2_final.csv", final_rows)
 
-    holdout_rows = [row for row in rows if row["protocol"] == "holdout_60_20_20"]
+    holdout_rows = [row for row in rows if row["protocol"] == HOLDOUT_PROTOCOL]
+    if not holdout_rows:
+        raise RuntimeError(
+            f"No hold-out rows found for protocol={HOLDOUT_PROTOCOL}. "
+            f"Available protocols: {dict(protocol_counts)}"
+        )
+
     holdout_final = aggregate(holdout_rows, ["protocol", "method"])
+    if not holdout_final:
+        raise RuntimeError("Aggregated hold-out results are empty.")
+
     write_csv(RESULTS_DIR / "holdout_results_v2_final.csv", holdout_final)
 
     write_reports(df, group_notes)
@@ -309,7 +327,6 @@ def main() -> None:
     print(RESULTS_DIR / "holdout_results_v2_final.csv")
     print(DEBUG_DIR / "cv_protocol_report.md")
     print(DEBUG_DIR / "leakage_check_strict.md")
-
 
 if __name__ == "__main__":
     main()

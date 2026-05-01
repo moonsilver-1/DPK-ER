@@ -7,7 +7,9 @@
 ## Protocols
 
 - Row-level StratifiedKFold: 5 folds, seed=3407.
-- Hold-out split: 60/20/20 design, final test uses 20% untouched data.
+- Repeated hold-out: seeds=[3407, 42, 2026, 2027, 2028].
+- Each hold-out run uses 80% training pool and 20% untouched test set.
+- Model selection is performed inside the training pool; test sets are not used for model selection.
 
 ## Group Split Notes
 
